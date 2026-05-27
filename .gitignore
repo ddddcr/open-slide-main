@@ -1,0 +1,13 @@
+node_modules
+dist
+.DS_Store
+*.log
+.vite
+*.tsbuildinfo
+.turbo
+.codex
+.playwright-mcp
+my-slide
+
+# Local Netlify folder
+.netlify

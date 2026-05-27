@@ -1,0 +1,15 @@
+node_modules
+apps/*/node_modules
+packages/*/node_modules
+my-slide/node_modules
+apps/web
+my-slide
+packages/cli
+.git
+.turbo
+packages/core/.turbo
+apps/demo/dist
+packages/core/dist
+.codex
+.playwright-mcp
+.DS_Store
