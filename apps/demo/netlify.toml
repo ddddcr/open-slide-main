@@ -1,3 +1,7 @@
+[build]
+  command = "cd ../.. && pnpm --filter @open-slide/core build && pnpm --filter demo build"
+  publish = "dist"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
