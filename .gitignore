@@ -8,3 +8,6 @@ dist
 .codex
 .playwright-mcp
 my-slide
+
+# Local Netlify folder
+.netlify

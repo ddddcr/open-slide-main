@@ -633,7 +633,9 @@ const Mindset: Page = () => (
             <br />
             亲自学语法、算法、框架
           </div>
-          <div style={{ marginTop: 22, fontSize: 27, lineHeight: 1.62, color: palette.muted }}>门槛高，反馈慢。对新手来说，错误往往不是“不会做产品”，而是连工具链都还没搭起来。</div>
+          <div style={{ marginTop: 22, fontSize: 27, lineHeight: 1.62, color: palette.muted }}>
+            门槛高，反馈慢。对新手来说，错误往往不是“不会做产品”，而是连工具链都还没搭起来。
+          </div>
         </Panel>
         <Panel padding={36} minHeight={560}>
           <div

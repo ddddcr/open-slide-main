@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "open-slide dev",
-    "build": "open-slide build",
+    "build": "([ -f ../../packages/core/dist/cli/bin.js ] || pnpm --filter @open-slide/core build) && open-slide build",
     "preview": "open-slide preview"
   },
   "dependencies": {

@@ -633,285 +633,245 @@ const categories: Category[] = [
       {
         name: '/landing-report',
         what: '发版队列看板。',
-        canDo: '查看当前有哪些版本槽、前面还有多少 PR 在排队。',
-        logic: '发布不是单人动作，它把协作队列可视化，减少版本抢占和冲突。',
+        canDo: '看当前 open PR 占了哪些版本槽位，还有哪些工作区快要 ship。',
+        logic: '把“现在适不适合发版”变成可视化队列，而不是靠大家互相问。',
       },
       {
         name: '/document-release',
-        what: '发版后的文档同步器。',
-        canDo: '更新 README、ARCHITECTURE、CONTRIBUTING、CLAUDE.md、TODO 等文档。',
-        logic: '通过对照代码 diff 和现有文档，自动找出哪些说明已经过时。',
-      },
-      {
-        name: '/document-generate',
-        what: '缺失文档生成器。',
-        canDo: '按教程、How-to、Reference、Explanation 结构补全项目文档。',
-        logic: '先研究代码和能力边界，再按 Diataxis 框架组织文档，避免只有一篇混合 README。',
+        what: '发版后文档同步器。',
+        canDo: '把 README、ARCHITECTURE、CONTRIBUTING、CHANGELOG 跟代码变更对齐。',
+        logic: '不是把文档当附属品，而是按 diff 反推文档该补什么，降低知识断层。',
       },
       {
         name: '/retro',
-        what: '工程周复盘工具。',
-        canDo: '回看提交、节奏、质量趋势和个人贡献。',
-        logic: '把 commit 和工作模式结构化，帮助团队形成连续改进，而不是只靠记忆开会。',
+        what: '工程周复盘器。',
+        canDo: '总结一周交付内容、代码质量趋势和个人/团队工作模式。',
+        logic: '通过 commit 历史和质量信号生成趋势视角，而不是只列发生了什么。',
       },
       {
         name: '/make-pdf',
-        what: 'Markdown 成品化导出器。',
-        canDo: '把说明文、复盘文、交付文转成正式 PDF。',
-        logic: '统一分页、页码、目录和版式，让 AI 产出的文档能直接发给非技术角色。',
+        what: '把 markdown 变成成品 PDF。',
+        canDo: '给周报、方案、交接文档导出正式 PDF 版本。',
+        logic: '做的不只是格式转换，而是分页、目录、页眉、水印等“可提交文档”细节。',
+      },
+      {
+        name: '/learn',
+        what: '项目经验知识库管理器。',
+        canDo: '回看历史学到什么、导出经验、删掉过时知识。',
+        logic: '让一次排障或一次发布积累变成团队长期可复用记忆。',
       },
     ],
   },
   {
     key: 'browser',
-    title: '浏览器、协作、记忆与边界控制路线',
-    countLabel: '17 skills',
-    purpose: '这类能力让 AI 真正接触网页、共享会话、记住上下文，并在高风险场景下守住边界。',
-    useWhen: '当你要测网页、抓信息、共享浏览器、保存上下文、搭记忆库或限制 AI 乱动时，用这一类。',
+    title: '浏览器、现场验证与协作路线',
+    countLabel: '13 skills',
+    purpose: '这类能力负责真实打开页面、抓取数据、共享浏览器上下文，并让验证更贴近用户现场。',
+    useWhen: '当任务跟网页、站点、浏览器登录态、部署结果或在线数据有关时，优先想这一类。',
     logic:
-      '底层是浏览器守护进程 + 状态文件 + cookie 导入 + 项目记忆 + 风险拦截：把“AI 会操作网页”变成可控系统，而不是黑盒。',
+      '底层是 browser daemon + cookies + 共享会话 + 页面证据，把 AI 从“看代码猜页面”变成“真的去操作页面”。',
     entries: [
       {
+        name: '/gstack',
+        what: '通用浏览器操作入口。',
+        canDo: '打开页面、点击、截图、对比改动前后、查看状态。',
+        logic: '封装高频浏览器动作，让网页验证变成低成本默认动作。',
+      },
+      {
         name: '/browse',
-        what: '高速 headless 浏览器 skill。',
-        canDo: '打开网页、点击、输入、截图、检查状态、比对前后变化。',
-        logic: '通过独立浏览器二进制和命令注册表，让页面操作速度和可重复性都高于通用 MCP 浏览器。',
+        what: '快速网页 QA / dogfooding skill。',
+        canDo: '测试用户流、表单、上传、弹窗、响应式布局，并产出截图证据。',
+        logic: '通过浏览器自动化把“看起来没问题”变成真实可复现操作。',
       },
       {
         name: '/open-gstack-browser',
-        what: '可视化 GStack Browser 启动器。',
-        canDo: '打开带侧边栏、反 bot、活动流和 cookie 导入入口的可视浏览器。',
-        logic: '把浏览器从“后台黑盒”变成“人能旁观和接管的工作台”，便于 UX 设计师一起验收。',
-      },
-      {
-        name: '/connect-chrome',
-        what: '旧命名兼容入口。',
-        canDo: '让老用户仍然能打开同一个可视浏览器能力。',
-        logic: '本质是别名与迁移兼容，降低命令改名带来的学习成本。',
-      },
-      {
-        name: '/setup-browser-cookies',
-        what: '真实浏览器 cookie 导入器。',
-        canDo: '把 Chrome、Arc、Brave、Edge 里的登录状态带给 gstack 浏览器。',
-        logic: '复用人的真实会话，而不是让 AI 重新登录，特别适合需要权限的网站验证。',
-      },
-      {
-        name: '/scrape',
-        what: '网页数据抽取入口。',
-        canDo: '从网页提取结构化内容，先原型化，再变成稳定流程。',
-        logic: '第一次先探索页面结构，之后就能沉淀成更快的固定化抓取逻辑。',
-      },
-      {
-        name: '/skillify',
-        what: '把抓取流程永久化的工具。',
-        canDo: '把一次成功 scrape 流程保存成可复用 browser skill。',
-        logic: '回看最近成功的对话和页面操作，再自动合成脚本与测试。',
+        what: '打开带侧边栏的可见 Chromium。',
+        canDo: '你可以一边看 AI 操作，一边实时观察页面和行为日志。',
+        logic: '让 agent 操作从黑盒变成可观察过程，更适合联调和教学。',
       },
       {
         name: '/pair-agent',
-        what: '多 AI 共享浏览器会话的协调器。',
-        canDo: '让 Codex、OpenClaw、Cursor 等不同 agent 在同一浏览器里协作。',
-        logic: '通过 setup key、会话令牌、标签页隔离和速率限制，把协作做成安全的多租户浏览器。',
+        what: '把浏览器配对给另一个 AI。',
+        canDo: '生成 key，让另一个 agent 接入你的浏览器标签页。',
+        logic: '把单人单浏览器扩展成多 agent 协作，同步网页上下文。',
       },
       {
-        name: '/context-save',
-        what: '保存当前工作上下文的 skill。',
-        canDo: '记录 git 状态、关键决策和剩余工作。',
-        logic: '把“当前做到哪了”结构化存下来，给下一次会话直接接续。',
+        name: '/scrape',
+        what: '从网页拉结构化数据。',
+        canDo: '给定页面后提取表格、列表、字段并返回 JSON。',
+        logic: '先原型化抓取流程，再把意图和页面结构固化成稳定脚本。',
       },
       {
-        name: '/context-restore',
-        what: '恢复之前上下文的 skill。',
-        canDo: '从最近一次保存状态继续干，而不是重新解释背景。',
-        logic: '读取之前保存的上下文和状态标记，让 AI 从上次停的地方继续。',
+        name: '/skillify',
+        what: '把一次成功抓取固化成永久 skill。',
+        canDo: '把临时浏览器抓取流程沉淀成脚本和测试，下次同类页面秒抓。',
+        logic: '把“本次好运气”转成“下次可复用资产”。',
       },
       {
-        name: '/learn',
-        what: '项目 learnings 管理器。',
-        canDo: '查看、搜索、清理 AI 在这个项目里累积的偏好和坑点。',
-        logic: '使用项目级 learnings 文件，逐步形成“这个 repo 的操作经验库”。',
+        name: '/setup-browser-cookies',
+        what: '导入真实浏览器 cookies。',
+        canDo: '让 headless 浏览器继承登录态，去测需要账号权限的页面。',
+        logic: '解决“能打开页面但看不到真实内容”的验证断层。',
       },
       {
-        name: '/setup-gbrain',
-        what: '持久知识库初始化器。',
-        canDo: '为 AI 搭建本地或云端记忆库，并注册为 MCP 能力。',
-        logic: '把短期会话记忆升级成长期可查询的知识库，支持 PGLite、Supabase 等路径。',
+        name: '/verification',
+        what: '全链路验证器。',
+        canDo: '从浏览器一直验证到 API、数据和返回内容。',
+        logic: '不是只确认页面打开，而是连同后端响应和数据链路一起验证。',
+      },
+      {
+        name: '/canary',
+        what: '上线后巡检。',
+        canDo: '持续看生产页面异常和性能漂移。',
+        logic: '复用浏览器和性能基线能力，把线上验证继续做下去。',
+      },
+      {
+        name: '/setup-deploy',
+        what: '给发布验证建立部署配置。',
+        canDo: '探测平台、健康检查地址和部署状态命令，写入项目文档。',
+        logic: '把每次都要重新解释的部署细节沉淀成可自动复用的配置。',
       },
       {
         name: '/sync-gbrain',
-        what: '仓库同步到知识库的入口。',
-        canDo: '把当前 repo 的代码和指引重新索引进 gbrain。',
-        logic: '通过 sources add + sync + CLAUDE guidance 刷新，让后续搜索尽量先走结构化知识库。',
+        what: '同步仓库知识给 gbrain。',
+        canDo: '更新代码索引，让搜索和知识检索更准。',
+        logic: '浏览器验证之外，再补一层“代码和知识库是最新的”。',
       },
       {
-        name: '/careful',
-        what: '危险操作提醒器。',
-        canDo: '在删库、重置、强推等高风险动作前提醒用户。',
-        logic: '把破坏性命令从默认放行改成显式确认，减少一次误操作带来的事故。',
+        name: '/context-save',
+        what: '保存当前工作上下文。',
+        canDo: '记录 git 状态、关键决定和剩余工作，方便之后续上。',
+        logic: '让跨天协作和交接不中断，不靠人肉回忆。',
       },
       {
-        name: '/freeze',
-        what: '目录级写入锁。',
-        canDo: '把 AI 的改动范围限制到一个目录。',
-        logic: '通过硬边界阻止“顺手优化别处”，特别适合排障时控制变更范围。',
-      },
-      {
-        name: '/guard',
-        what: '全套安全模式。',
-        canDo: '同时打开危险提醒和目录写锁。',
-        logic: '把命令风险和编辑风险一起收紧，适合生产环境或高敏感仓库。',
-      },
-      {
-        name: '/unfreeze',
-        what: '解除目录锁的入口。',
-        canDo: '在确认需要扩大工作范围时重新放开编辑权限。',
-        logic: '让边界控制是可恢复、可切换的，而不是一次性开关。',
-      },
-      {
-        name: '/gstack-upgrade',
-        what: 'gstack 自升级器。',
-        canDo: '更新全局安装或 vendored 安装，并提示新功能。',
-        logic: '先探测当前安装方式，再走对应升级路径，避免用户自己手工猜版本状态。',
+        name: '/context-restore',
+        what: '恢复之前保存的上下文。',
+        canDo: '一键回到上次停下来的工作状态与决策背景。',
+        logic: '把“重建上下文”的成本从十几分钟压到几秒。',
       },
     ],
   },
   {
-    key: 'system',
-    title: 'iOS 真机、附带 CLI 与系统级增强',
-    countLabel: '15 functions',
-    purpose:
-      '这类能力说明 gstack 不只是网页工作流，还能扩到真机测试、附带命令行和更底层的系统机制。',
-    useWhen:
-      '当项目涉及 iPhone 真机、跨宿主安装、自动快照、浏览器接管或底层浏览器协议时，看这一类。',
+    key: 'ios',
+    title: 'iOS、系统增强与底层辅助路线',
+    countLabel: '10 skills',
+    purpose: '这类能力负责 iOS 真机测试、桌面环境增强、运行安全边界和系统级辅助流程。',
+    useWhen: '当任务跟 iPhone / iPad 真机、系统操作、文件边界或安全约束有关时，用这一类。',
     logic:
-      '底层是设备桥接、宿主适配、守护进程、状态文件和安全防护，让 AI 的能力不只停在代码编辑器里。',
+      '底层是原生桥接、目录边界控制、风险提示和工具安装，让 AI 能安全地碰系统，而不是只停留在代码层。',
     entries: [
       {
-        name: '/ios-qa',
-        what: 'iPhone 真机 QA 工作流。',
-        canDo: '直接测连接在 Mac 上的 iPhone 应用，或者走远程 tailnet 测试。',
-        logic: '通过 USB CoreDevice + 内嵌状态服务，把真机状态暴露给 agent 使用。',
+        name: '/ios-open-url',
+        what: '在真机或模拟器中打开 URL。',
+        canDo: '直接把页面、Deep Link 或本地调试地址推到 iOS 设备。',
+        logic: '通过桥接层把“移动端验证”纳入同一套 agent 流程。',
       },
       {
-        name: '/ios-fix',
-        what: 'iOS 缺陷自动修复工作流。',
-        canDo: '在真机 QA 找到问题后继续修复并验证。',
-        logic: '把真机测试结果和修复循环连起来，避免设备端和代码端割裂。',
+        name: '/ios-tap',
+        what: '在 iOS 设备上点击。',
+        canDo: '完成真机页面操作与交互验证。',
+        logic: '把设备输入事件暴露给 AI，使移动端验收不必手动接力。',
       },
       {
-        name: '/ios-design-review',
-        what: 'iPhone 设计质量审计。',
-        canDo: '按 Apple HIG 视角检查真机界面表现。',
-        logic: '以真机截图和系统级交互为依据，而不是只看模拟图或代码结构。',
+        name: '/ios-swipe',
+        what: '在 iOS 设备上滑动。',
+        canDo: '测试长列表、轮播、滑动关闭等手势路径。',
+        logic: '补齐桌面浏览器无法模拟的真实手势行为。',
       },
       {
-        name: '/ios-clean',
-        what: 'iOS 调试桥清理器。',
-        canDo: '发布前移除 DebugBridge 相关接线。',
-        logic: '把调试期临时接线和正式发布态分离，减少把辅助代码带上生产的风险。',
+        name: '/ios-screenshot',
+        what: '抓取 iOS 真机截图。',
+        canDo: '保留移动端问题证据、对比 UI、做缺陷记录。',
+        logic: '用截图作为移动端验证产物，而不是只给主观描述。',
       },
       {
-        name: '/ios-sync',
-        what: 'iOS 调试桥模板同步器。',
-        canDo: '重新生成或刷新 iOS 调试辅助代码。',
-        logic: '通过统一模板和代码生成保证调试桥与上游约定保持同步。',
+        name: '/ios-list-devices',
+        what: '列出当前可用设备。',
+        canDo: '确认真机或模拟器是否在线、名称是什么。',
+        logic: '把环境确认前置，减少“命令没问题但设备没连上”的排查时间。',
       },
       {
-        name: 'gstack-model-benchmark',
-        what: '独立模型横评 CLI。',
-        canDo: '在命令行里直接比较模型的成本、速度和质量。',
-        logic: '把模型对照实验做成可脚本化命令，而不是只能在 skill 内部跑。',
+        name: '/careful',
+        what: '高风险操作提醒器。',
+        canDo: '在 `rm -rf`、force push、删库等命令前先提醒。',
+        logic: '通过风险拦截，让 AI 在碰生产或共享环境时不轻易做破坏性动作。',
       },
       {
-        name: 'gstack-taste-update',
-        what: '视觉偏好写回 CLI。',
-        canDo: '把设计选择结果沉淀成项目 taste profile。',
-        logic: '让 design-shotgun 的选择历史影响下一轮生成，使系统逐步学会你的审美。',
+        name: '/freeze',
+        what: '编辑范围冻结器。',
+        canDo: '把本次修改限制在某个目录，只允许 AI 动指定范围。',
+        logic: '通过目录边界降低误改概率，尤其适合多人协作仓库。',
       },
       {
-        name: 'gstack-ios-qa-daemon',
-        what: 'iOS QA 守护进程。',
-        canDo: '作为 Mac 与 iPhone 之间的常驻桥梁，支撑远程或本地真机 QA。',
-        logic: '把设备连接、会话、能力级别和审计拆到后台服务里，降低每次测试的启动成本。',
+        name: '/unfreeze',
+        what: '解除编辑范围限制。',
+        canDo: '当任务扩大时恢复全局编辑能力。',
+        logic: '和 /freeze 成对使用，让安全边界可控可撤回。',
       },
       {
-        name: 'gstack-ios-qa-mint',
-        what: 'iOS 远程授权管理 CLI。',
-        canDo: '授予、吊销和查看谁能远程访问你的真机 QA 通道。',
-        logic: '让远程真机协作不是默认开放，而是显式 allowlist 管理。',
+        name: '/guard',
+        what: '最高级别安全模式。',
+        canDo: '同时开启危险命令提醒和目录冻结。',
+        logic: '把“碰生产时要非常小心”变成系统级约束，而不是口头约束。',
       },
       {
-        name: '多宿主安装',
-        what: '同一套 skill 支持多种 AI 宿主。',
-        canDo: '装到 Claude Code、Codex、Cursor、OpenCode、Kiro、Hermes、OpenClaw 等。',
-        logic: '通过 host config 和 setup 适配层，把一套模板生成为不同宿主可识别的格式。',
-      },
-      {
-        name: 'Browser handoff',
-        what: '浏览器人工接管机制。',
-        canDo: '遇到验证码、MFA、权限墙时，把当前浏览器切回给人类处理后再恢复。',
-        logic: '通过 headed 浏览器接管与 resume，让“人机协同”成为正式流程，而不是临时中断。',
-      },
-      {
-        name: 'Prompt injection defense',
-        what: '浏览器侧提示注入防护栈。',
-        canDo: '防止恶意网页通过隐藏指令操控 agent。',
-        logic: '结合本地分类器、对话检查、随机 canary 和多模型投票，把网页当作不可信输入来处理。',
-      },
-      {
-        name: 'Continuous checkpoint',
-        what: '连续快照模式。',
-        canDo: '边做边自动提交 WIP 和上下文，减少中断丢进度。',
-        logic: '把会话进展写进结构化 commit，之后可被 /context-restore 和 /ship 正确识别。',
-      },
-      {
-        name: 'Domain skills',
-        what: '按站点积累操作经验的浏览器机制。',
-        canDo: '记住某个网站的特别规律，下次访问自动生效。',
-        logic: '把“这个站点的坑”从一次性经验变成站点级记忆，降低重复踩坑概率。',
-      },
-      {
-        name: 'Raw CDP escape hatch',
-        what: '底层 Chrome DevTools Protocol 直连能力。',
-        canDo: '在高级场景下绕过高层命令，直接调浏览器底层方法。',
-        logic: '作为最后逃生口存在，但通过 allowlist 控制范围，防止底层能力被滥用。',
+        name: '/setup-gbrain',
+        what: '把 gbrain 环境装起来。',
+        canDo: '初始化本地或远程知识层，供后续检索和同步使用。',
+        logic: '把智能检索基础设施搭好，后续 skill 才能拿到更稳的上下文。',
       },
     ],
   },
 ];
 
-const makeOverviewPage =
-  (category: Category, index: number): Page =>
-  () => (
-    <div style={page}>
-      {gridBg}
-      <div style={shell}>
-        <Eyebrow>{`${String(index).padStart(2, '0')} · 类别总览`}</Eyebrow>
-        <div style={{ height: 20 }} />
-        <SectionTitle size={76}>{category.title}</SectionTitle>
-        <div style={{ marginTop: 22 }}>
-          <Body size={30} width={1240} color={palette.text}>
+const makeOverviewPage = (category: Category, index: number): Page => () => (
+  <div style={page}>
+    {gridBg}
+    <div style={shell}>
+      <Eyebrow>{`${String(index).padStart(2, '0')} · ${category.key}`}</Eyebrow>
+      <div style={{ height: 20 }} />
+      <SectionTitle size={78}>{category.title}</SectionTitle>
+      <div style={{ marginTop: 24, display: 'flex', gap: 12, flexWrap: 'wrap' as const }}>
+        <Pill>{category.countLabel}</Pill>
+        <Pill tone={palette.gold} background={palette.goldSoft}>
+          适用场景：{category.useWhen}
+        </Pill>
+      </div>
+      <div style={{ marginTop: 26, display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: 22 }}>
+        <Panel minHeight={420}>
+          <CardTitle>这一类是做什么的</CardTitle>
+          <div style={{ marginTop: 18, fontSize: 28, lineHeight: 1.62, color: palette.text }}>
             {category.purpose}
-          </Body>
-        </div>
-        <div
-          style={{ marginTop: 28, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}
-        >
-          <OverviewStat title="范围" value={category.countLabel} body="这一类覆盖的功能数量。" />
-          <OverviewStat title="什么时候用" value="When" body={category.useWhen} />
-          <OverviewStat title="底层逻辑" value="How" body={category.logic} />
-        </div>
-        <div style={{ marginTop: 24, display: 'flex', gap: 12, flexWrap: 'wrap' as const }}>
-          {category.entries.map((entry) => (
-            <Pill key={entry.name} tone={palette.gold} background={palette.goldSoft}>
-              {entry.name}
-            </Pill>
-          ))}
+          </div>
+          <div style={{ marginTop: 24 }}>
+            <CardTitle tone={palette.warn}>底层逻辑</CardTitle>
+          </div>
+          <div style={{ marginTop: 10, fontSize: 24, lineHeight: 1.58, color: palette.muted }}>
+            {category.logic}
+          </div>
+        </Panel>
+        <div style={{ display: 'grid', gap: 18 }}>
+          <OverviewStat
+            title="你该什么时候想起它"
+            value={category.key.toUpperCase()}
+            body={category.useWhen}
+          />
+          <Panel minHeight={180} background={palette.soft}>
+            <CardTitle>这一类覆盖的 Skill</CardTitle>
+            <div style={{ marginTop: 14, display: 'flex', gap: 12, flexWrap: 'wrap' as const }}>
+              {category.entries.map((entry) => (
+                <Pill key={entry.name} tone={palette.gold} background={palette.goldSoft}>
+                  {entry.name}
+                </Pill>
+              ))}
+            </div>
+          </Panel>
         </div>
       </div>
       <Footer index={index} label={`${category.key}-overview`} />
     </div>
-  );
+  </div>
+);
 
 const makeDetailPage =
   (category: Category, features: Feature[], index: number, chunkIndex: number): Page =>
@@ -1223,8 +1183,7 @@ const Prompting: Page = () => (
             <CardTitle>验收型需求</CardTitle>
             <div style={{ marginTop: 12 }}>
               <PromptBox>
-                这是 staging 链接。请先判断是用 /qa 还是
-                /qa-only，给我截图、问题清单和成功验证标准。
+                这是 staging 链接。请先判断是用 /qa 还是 /qa-only，给我截图、问题清单和成功验证标准。
               </PromptBox>
             </div>
           </Panel>
