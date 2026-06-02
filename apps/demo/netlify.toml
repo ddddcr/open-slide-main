@@ -2,6 +2,9 @@
   command = "cd ../.. && pnpm --filter @open-slide/core build && pnpm --filter demo build"
   publish = "dist"
 
+[build.environment]
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
