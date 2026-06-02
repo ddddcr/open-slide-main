@@ -7,10 +7,24 @@
         "type": "emoji",
         "value": "⚡"
       }
+    },
+    {
+      "id": "f-81c85b31",
+      "name": "分享",
+      "icon": {
+        "type": "color",
+        "value": "#b8743e"
+      }
     }
   ],
   "assignments": {
     "open-slide-launch": "f-3ed31a46",
-    "material-design-2014": "f-3ed31a46"
+    "material-design-2014": "f-3ed31a46",
+    "openmirror-deploy-guide": "f-81c85b31",
+    "vibe-coding-primer": "f-81c85b31",
+    "garden-skills-guide": "f-81c85b31",
+    "open-slide-intern-guide": "f-81c85b31",
+    "opc-harness-guide": "f-81c85b31",
+    "openmirror-uiux-guide": "f-81c85b31"
   }
 }

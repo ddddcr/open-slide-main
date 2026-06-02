@@ -32,7 +32,7 @@ const warm = '#ffa860';
 const violet = '#c598ff';
 const danger = '#ff7a85';
 
-const TOTAL = 23;
+const TOTAL = 24;
 
 const keyframes = `
 @keyframes osa-fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
@@ -42,6 +42,16 @@ const keyframes = `
 @keyframes osa-glow { 0%, 100% { box-shadow: 0 0 0 1px ${rule}, 0 0 24px rgba(110, 231, 255, 0.06); } 50% { box-shadow: 0 0 0 1px rgba(110, 231, 255, 0.5), 0 0 40px rgba(110, 231, 255, 0.25); } }
 @keyframes osa-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 @keyframes osa-scaleIn { from { transform: scale(0.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes binary-fall {
+  0% { transform: translateY(-120%); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(120%); opacity: 0; }
+}
+@keyframes binary-blink {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.7; }
+}
 `;
 
 const fill = {
@@ -72,6 +82,62 @@ const GridBg = () => (
     />
   </>
 );
+
+const BinaryRain = () => {
+  const columns = 82;
+  const rows = 24;
+  const colData = Array.from({ length: columns }, (_, ci) => ({
+    id: ci,
+    delay: Math.random() * -10,
+    duration: 3 + Math.random() * 5,
+    chars: Array.from({ length: rows }, () => (Math.random() > 0.5 ? '1' : '0')),
+  }));
+
+  return (
+    <div
+      aria-hidden
+      style={{
+        position: 'absolute',
+        inset: 0,
+        display: 'flex',
+        justifyContent: 'space-between',
+        padding: '0 20px',
+        overflow: 'hidden',
+        pointerEvents: 'none',
+        maskImage: 'radial-gradient(ellipse at 70% 40%, black 10%, transparent 60%)',
+        opacity: 0.45,
+      }}
+    >
+      {colData.map((col) => (
+        <div
+          key={col.id}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 6,
+            fontFamily: 'var(--osd-font-display)',
+            fontSize: 14,
+            color: 'var(--osd-accent)',
+            lineHeight: 1,
+            animation: `binary-fall ${col.duration}s linear ${col.delay}s infinite`,
+          }}
+        >
+          {col.chars.map((ch, ri) => (
+            <span
+              key={ri}
+              style={{
+                animation: `binary-blink ${1.5 + Math.random() * 2}s ease-in-out ${Math.random() * -3}s infinite`,
+              }}
+            >
+              {ch}
+            </span>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const Eyebrow = ({ children, delay = 0 }: { children: ReactNode; delay?: number }) => (
   <div
@@ -136,7 +202,7 @@ const Footer = ({ section, n }: { section: string; n: number }) => (
       <span style={{ color: 'var(--osd-accent)', marginRight: 12 }}>●</span>
       {section}
       <span style={{ color: rule, margin: '0 18px' }}>·</span>
-      <span style={{ color: text2 }}>open-slide</span>
+      <span style={{ color: text2 }}>项目发布指南</span>
     </span>
     <span style={{ fontVariantNumeric: 'tabular-nums' }}>
       {String(n).padStart(2, '0')} / {String(TOTAL).padStart(2, '0')}
@@ -274,6 +340,7 @@ const InfoCard = ({
 const Cover: Page = () => (
   <div style={{ ...fill, padding: '120px 100px' }}>
     <GridBg />
+    <BinaryRain />
     <div
       aria-hidden
       style={{
@@ -306,9 +373,7 @@ const Cover: Page = () => (
           margin: 0,
           animation: 'osa-fadeUp 700ms ease-out 200ms both',
         }}
-      >
-        OpenMirror
-      </h1>
+      >OpenMirror</h1>
       <div style={{ height: 16 }} />
       <h1
         style={{
@@ -371,57 +436,74 @@ const QuickReference: Page = () => (
       <Heading size={88}>如何选择发布方式</Heading>
       <div style={{ height: 48 }} />
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        {[
-          {
-            type: '纯静态页面，无数据库，无内网 API',
-            network: '外网/内网用户可访问',
-            method: 'CDN 发布',
-            accent: mint,
-          },
-          {
-            type: '有后端服务 / 数据库 / 内网 API 依赖',
-            network: '外网或内网',
-            method: 'PaaS 发布',
-            accent: 'var(--osd-accent)',
-          },
-        ].map((row, i) => (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '2fr 1.5fr 1fr',
+            gap: 40,
+            alignItems: 'center',
+            background: surface,
+            border: `1px solid ${rule}`,
+            borderLeft: `3px solid ${mint}`,
+            borderRadius: 8,
+            padding: '28px 36px',
+            animation: `osa-fadeUp 500ms ease-out 300ms both`,
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 26, fontWeight: 600, color: 'var(--osd-text)' }}>
+              纯静态页面，无数据库，无内网 API
+            </div>
+            <div style={{ fontSize: 20, color: muted, marginTop: 6 }}>外网/内网用户可访问</div>
+          </div>
+          <div style={{ fontSize: 22, color: text2 }}>前置条件：OpenMirror</div>
           <div
-            key={i}
             style={{
-              display: 'grid',
-              gridTemplateColumns: '2fr 1.5fr 1fr',
-              gap: 40,
-              alignItems: 'center',
-              background: surface,
-              border: `1px solid ${rule}`,
-              borderLeft: `3px solid ${row.accent}`,
-              borderRadius: 8,
-              padding: '28px 36px',
-              animation: `osa-fadeUp 500ms ease-out ${300 + i * 150}ms both`,
+              fontSize: 30,
+              fontWeight: 700,
+              fontFamily: 'var(--osd-font-display)',
+              color: mint,
+              textAlign: 'right',
             }}
           >
-            <div>
-              <div style={{ fontSize: 26, fontWeight: 600, color: 'var(--osd-text)' }}>
-                {row.type}
-              </div>
-              <div style={{ fontSize: 20, color: muted, marginTop: 6 }}>{row.network}</div>
-            </div>
-            <div style={{ fontSize: 22, color: text2 }}>
-              前置条件：外网 GitLab 仓库 + 双因子认证
-            </div>
-            <div
-              style={{
-                fontSize: 30,
-                fontWeight: 700,
-                fontFamily: 'var(--osd-font-display)',
-                color: row.accent,
-                textAlign: 'right',
-              }}
-            >
-              {row.method}
-            </div>
+            CDN 发布
           </div>
-        ))}
+        </div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '2fr 1.5fr 1fr',
+            gap: 40,
+            alignItems: 'center',
+            background: surface,
+            border: `1px solid ${rule}`,
+            borderLeft: `3px solid var(--osd-accent)`,
+            borderRadius: 8,
+            padding: '28px 36px',
+            animation: `osa-fadeUp 500ms ease-out 450ms both`,
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 26, fontWeight: 600, color: 'var(--osd-text)' }}>
+              有后端服务 / 数据库 / 内网 API 依赖
+            </div>
+            <div style={{ fontSize: 20, color: muted, marginTop: 6 }}>外网或内网</div>
+          </div>
+          <div style={{ fontSize: 22, color: text2 }}>
+            前置条件：OpenMirror+外网 GitLab 仓库+双因子认证
+          </div>
+          <div
+            style={{
+              fontSize: 30,
+              fontWeight: 700,
+              fontFamily: 'var(--osd-font-display)',
+              color: 'var(--osd-accent)',
+              textAlign: 'right',
+            }}
+          >
+            PaaS 发布
+          </div>
+        </div>
       </div>
       <div style={{ height: 32 }} />
       <AlertBox color={warm} delay={600}>
@@ -436,6 +518,7 @@ const QuickReference: Page = () => (
 const Section1: Page = () => (
   <div style={{ ...fill, padding: '120px 100px' }}>
     <GridBg />
+    <BinaryRain />
     <div
       style={{
         position: 'relative',
@@ -627,10 +710,10 @@ const TwoFactor2: Page = () => (
       <Eyebrow>1.3 双因子认证（2FA）</Eyebrow>
       <div style={{ height: 20 }} />
       <Heading size={72}>步骤二：绑定 GitLab</Heading>
-      <div style={{ height: 32 }} />
-      <div style={{ display: 'flex', gap: 28 }}>
+      <div style={{ height: 56 }} />
+      <div style={{ display: 'flex', gap: 28, margin: 48 }}>
         {[
-          { img: imgGitlab2fa, label: '进入双因子绑定页面' },
+          { img: imgGitlab2fa, label: '打开Authenticator 进入双因子绑定页面' },
           { img: imgQrScan, label: 'Authenticator 扫描 QR 码' },
           { img: imgPinEntry, label: '输入 6 位 PIN 码完成绑定' },
         ].map((item, i) => (
@@ -681,7 +764,7 @@ const ProjectCreate: Page = () => (
     <div style={{ position: 'relative', zIndex: 1 }}>
       <Eyebrow>1.4 项目创建与权限</Eyebrow>
       <div style={{ height: 20 }} />
-      <Heading size={72}>创建项目与权限配置</Heading>
+      <Heading size={72}>在 Gitlab 创建项目与权限配置</Heading>
       <div style={{ height: 32 }} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28 }}>
         <InfoCard title="自行创建项目" titleColor="var(--osd-accent)">
@@ -716,6 +799,7 @@ const ProjectCreate: Page = () => (
 const Section2: Page = () => (
   <div style={{ ...fill, padding: '120px 100px' }}>
     <GridBg />
+    <BinaryRain />
     <div
       style={{
         position: 'relative',
@@ -782,19 +866,20 @@ const DailyWorkflow: Page = () => (
       <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 32 }}>
         <CodeBlock>
           <div>
-            <span style={{ color: mint }}>git checkout -b</span> work-ued-20475
+            <span style={{ color: mint }}>git checkout -b work-ued-20475 </span> #创建并切换分支
           </div>
           <div>
-            <span style={{ color: mint }}>git pull</span>
+            <span style={{ color: mint }}>git pull</span> #拉取最新分支
           </div>
           <div>
-            <span style={{ color: mint }}>git add</span> -A
+            <span style={{ color: mint }}>git add -A</span> #添加所有修改
           </div>
           <div>
-            <span style={{ color: mint }}>git commit</span> -m "UED-20475 feat ..."
+            <span style={{ color: mint }}>git commit -m "UED-20475 feat ..."</span>{' '}
+            #提交暂存区的更改
           </div>
           <div>
-            <span style={{ color: mint }}>git push</span> -u origin work-ued-20475
+            <span style={{ color: mint }}>git push -u origin work-ued-20475</span> #将分支推送至仓库
           </div>
         </CodeBlock>
         <InfoCard title="一句话记忆" titleColor="var(--osd-accent)">
@@ -826,38 +911,46 @@ const ZipMigration: Page = () => (
         <InfoCard title="阶段一：初始推送" titleColor="var(--osd-accent)">
           <CodeBlock>
             <div>
-              <span style={{ color: mint }}>git init</span>
+              <span style={{ color: mint }}>git init</span> #本地初始化一个新的 Git 仓库
             </div>
             <div>
-              <span style={{ color: mint }}>git remote add</span> origin &lt;仓库地址&gt;
+              <span style={{ color: mint }}>git remote add origin &lt;仓库地址&gt;</span>{' '}
+              #添加远程仓库地址
             </div>
             <div>
-              <span style={{ color: mint }}>git pull</span> origin work-ued-20475
+              <span style={{ color: mint }}>git pull origin work-ued-20475</span> #拉取远程
+              work-ued-20475 分支的代码到本地
             </div>
             <div>
-              <span style={{ color: mint }}>git add .</span>
+              <span style={{ color: mint }}>git add .</span> #添加所有的文件到暂存区
             </div>
             <div>
-              <span style={{ color: mint }}>git commit</span> -m "UED-20475 feat ..."
+              <span style={{ color: mint }}>git commit -m "UED-20475 feat ..."</span>{' '}
+              #提交更改到本地仓库
             </div>
             <div>
-              <span style={{ color: danger }}>git push -f</span> origin master:work-ued-20475
+              <span style={{ color: danger }}>git push -f origin master:work-ued-20475</span>{' '}
+              #强制推送本地到远程分支
             </div>
           </CodeBlock>
         </InfoCard>
         <InfoCard title="阶段二：冲突补救" titleColor={mint}>
           <CodeBlock>
             <div>
-              <span style={{ color: mint }}>git fetch</span> origin work-ued-20475
+              <span style={{ color: mint }}>git fetch origin work-ued-20475</span> #下载远程
+              work-ued-20475fenzhi 的最新代码，但不合并
             </div>
             <div>
-              <span style={{ color: mint }}>git reset --soft</span> origin/work-ued-20475
+              <span style={{ color: mint }}>git reset --soft origin/work-ued-20475</span>{' '}
+              #软重置：将当前分支重置到远程分支的状态
             </div>
             <div>
-              <span style={{ color: mint }}>git commit</span> -m "UED-20475 feat ..."
+              <span style={{ color: mint }}>git commit -m "UED-20475 feat ..."</span>{' '}
+              #将暂存区的更改提交为一个新的 commit
             </div>
             <div>
-              <span style={{ color: mint }}>git push</span> origin work-ued-20475
+              <span style={{ color: mint }}>git push origin work-ued-20475</span>{' '}
+              #推送新提交到远程分支
             </div>
           </CodeBlock>
         </InfoCard>
@@ -938,9 +1031,112 @@ const CommitMsg: Page = () => (
   </div>
 );
 
+const OneCommandStart: Page = () => (
+  <div style={{ ...fill, padding: '120px 100px' }}>
+    <GridBg />
+    <div
+      style={{
+        position: 'relative',
+        zIndex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: '100%',
+      }}
+    >
+      <Eyebrow delay={0}>GET STARTED</Eyebrow>
+      <div style={{ height: 36 }} />
+      <h1
+        style={{
+          fontFamily: 'var(--osd-font-display)',
+          fontSize: 120,
+          fontWeight: 800,
+          lineHeight: 1.05,
+          letterSpacing: '-0.02em',
+          margin: 0,
+          color: 'var(--osd-text)',
+          animation: 'osa-fadeUp 700ms ease-out 200ms both',
+        }}
+      >一句话启动</h1>
+      <div style={{ height: 48 }} />
+
+      <div
+        style={{
+          background: surface,
+          border: `1px solid ${rule}`,
+          borderRadius: 12,
+          padding: '40px 48px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 20,
+          animation: 'osa-fadeUp 600ms ease-out 500ms both',
+        }}
+      >
+        <span style={{ fontFamily: 'var(--osd-font-display)', fontSize: 28, color: muted }}>$</span>
+        <span
+          style={{
+            fontFamily: 'var(--osd-font-display)',
+            fontSize: 28,
+            color: 'var(--osd-accent)',
+          }}
+        >/opc-harness</span>
+        <span style={{ fontSize: 28, color: text2 }}>帮我本地初始化一个新的 Git 仓库 </span>
+      </div>
+      <div style={{ height: 64 }} />
+      <div
+        style={{
+          background: surface,
+          border: `1px solid ${rule}`,
+          borderRadius: 12,
+          padding: '40px 48px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 20,
+          animation: 'osa-fadeUp 600ms ease-out 500ms both',
+        }}
+      >
+        <span style={{ fontFamily: 'var(--osd-font-display)', fontSize: 28, color: muted }}>$</span>
+        <span
+          style={{
+            fontFamily: 'var(--osd-font-display)',
+            fontSize: 28,
+            color: 'var(--osd-accent)',
+          }}
+        >/opc-harness</span>
+        <span style={{ fontSize: 28, color: text2 }}>帮我将刚刚修改的代码发布到测试环境，需要静态资源发布，不要用灰度。pass 的 token 是：paas_**</span>
+      </div>
+      <div style={{ height: 64 }} />
+      <div
+        style={{
+          background: surface,
+          border: `1px solid ${rule}`,
+          borderRadius: 12,
+          padding: '40px 48px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 20,
+          animation: 'osa-fadeUp 600ms ease-out 500ms both',
+        }}
+      >
+        <span style={{ fontFamily: 'var(--osd-font-display)', fontSize: 28, color: muted }}>$</span>
+        <span
+          style={{
+            fontFamily: 'var(--osd-font-display)',
+            fontSize: 28,
+            color: 'var(--osd-accent)',
+          }}
+        >/opc-harness</span>
+        <span style={{ fontSize: 28, color: text2 }}>提交代码到远程</span>
+      </div>
+    </div>
+    <Footer section="opc" n={14} />
+  </div>
+);
+
 const Section3: Page = () => (
   <div style={{ ...fill, padding: '120px 100px' }}>
     <GridBg />
+    <BinaryRain />
     <div
       style={{
         position: 'relative',
@@ -967,7 +1163,7 @@ const Section3: Page = () => (
         纯静态项目 · 无后端依赖 · 快速上线
       </p>
     </div>
-    <Footer section="cdn" n={14} />
+    <Footer section="cdn" n={15} />
   </div>
 );
 
@@ -1016,13 +1212,14 @@ const CdnDeploy: Page = () => (
         />
       </div>
     </div>
-    <Footer section="cdn" n={15} />
+    <Footer section="cdn" n={16} />
   </div>
 );
 
 const Section4: Page = () => (
   <div style={{ ...fill, padding: '120px 100px' }}>
     <GridBg />
+    <BinaryRain />
     <div
       style={{
         position: 'relative',
@@ -1049,7 +1246,7 @@ const Section4: Page = () => (
         有后端服务 · 数据库依赖 · 内网 API
       </p>
     </div>
-    <Footer section="paas" n={16} />
+    <Footer section="paas" n={18} />
   </div>
 );
 
@@ -1088,7 +1285,7 @@ const FrontendDebug: Page = () => (
       <Eyebrow>4.3 前端页面调试</Eyebrow>
       <div style={{ height: 20 }} />
       <Heading size={72}>调试方式与预览</Heading>
-      <div style={{ height: 32 }} />
+      <div style={{ height: 56 }} />
       <div style={{ display: 'flex', gap: 28 }}>
         {[
           { img: imgPreviewComment, label: '预览窗口评论标注' },
@@ -1131,7 +1328,7 @@ const FrontendDebug: Page = () => (
         ))}
       </div>
     </div>
-    <Footer section="paas" n={18} />
+    <Footer section="paas" n={19} />
   </div>
 );
 
@@ -1141,7 +1338,7 @@ const DataBinding: Page = () => (
     <div style={{ position: 'relative', zIndex: 1 }}>
       <Eyebrow>4.4 数据绑定与发布</Eyebrow>
       <div style={{ height: 20 }} />
-      <Heading size={72}>Mock 数据 → 真实数据 → 发布</Heading>
+      <Heading size={72}>Mock 数据 → 真实数据 → 发布测试环境 → ...</Heading>
       <div style={{ height: 32 }} />
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28 }}>
         <InfoCard title="第一步：绑定 Mock 数据" titleColor="var(--osd-accent)">
@@ -1162,7 +1359,7 @@ const DataBinding: Page = () => (
             /opc-harness 帮我绑定这个接口数据 {'<'}YAPI链接{'>'}
           </div>
         </InfoCard>
-        <InfoCard title="第二步：发布操作" titleColor={mint}>
+        <InfoCard title="第二步：发布测试环境" titleColor={mint}>
           <div style={{ fontSize: 'var(--osd-size-body)', lineHeight: 1.6, color: text2 }}>
             调用 OPC 发布测试，等待流水线执行结果全部通过：
           </div>
@@ -1192,7 +1389,7 @@ const DataBinding: Page = () => (
         <img
           src={imgPaasDeploy}
           alt="PaaS 发布截图"
-          style={{ maxHeight: 240, borderRadius: 8, border: `1px solid ${rule}` }}
+          style={{ maxHeight: 340, borderRadius: 8, border: `1px solid ${rule}` }}
         />
       </div>
     </div>
@@ -1205,7 +1402,7 @@ const PipelineDebug: Page = () => (
     <GridBg />
     <div style={{ display: 'flex', gap: 60, height: '100%', position: 'relative', zIndex: 1 }}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <Eyebrow>4.6 流水线排障</Eyebrow>
+        <Eyebrow>4.5 流水线排障</Eyebrow>
         <div style={{ height: 20 }} />
         <Heading size={72}>流水线失败排查</Heading>
         <div style={{ height: 32 }} />
@@ -1238,11 +1435,12 @@ const PipelineDebug: Page = () => (
           style={{
             flex: 1,
             width: '100%',
+            minHeight: 260,
             objectFit: 'contain',
             borderRadius: 8,
             background: surface,
             border: `1px solid ${rule}`,
-            padding: 12,
+            padding: 8,
           }}
         />
         <img
@@ -1251,16 +1449,17 @@ const PipelineDebug: Page = () => (
           style={{
             flex: 1,
             width: '100%',
+            minHeight: 260,
             objectFit: 'contain',
             borderRadius: 8,
             background: surface,
             border: `1px solid ${rule}`,
-            padding: 12,
+            padding: 8,
           }}
         />
       </div>
     </div>
-    <Footer section="paas" n={20} />
+    <Footer section="paas" n={21} />
   </div>
 );
 
@@ -1304,7 +1503,7 @@ const VerifyRollback: Page = () => (
         回滚到上一版本标签。
       </AlertBox>
     </div>
-    <Footer section="verify" n={21} />
+    <Footer section="verify" n={22} />
   </div>
 );
 
@@ -1364,7 +1563,7 @@ const FAQ: Page = () => (
         ))}
       </div>
     </div>
-    <Footer section="faq" n={22} />
+    <Footer section="faq" n={23} />
   </div>
 );
 
@@ -1423,7 +1622,7 @@ const Appendix: Page = () => (
         <strong style={{ color: 'var(--osd-text)' }}>@张成润</strong> 反馈
       </AlertBox>
     </div>
-    <Footer section="appendix" n={23} />
+    <Footer section="appendix" n={24} />
   </div>
 );
 
@@ -1443,6 +1642,7 @@ export default [
   DailyWorkflow,
   ZipMigration,
   CommitMsg,
+  OneCommandStart,
   Section3,
   CdnDeploy,
   Section4,

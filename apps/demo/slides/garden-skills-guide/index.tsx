@@ -161,7 +161,17 @@ const Eyebrow = ({ children }: { children: ReactNode }) => (
 
 const Title = ({ children, size = 160 }: { children: ReactNode; size?: number }) => (
   <h1
-    style={{ margin: 0, fontFamily: 'var(--osd-font-display)', fontSize: '128px', lineHeight: 1.05, letterSpacing: '-0.04em', fontWeight: 600, maxWidth: 1360, color: palette.text, animation: 'keynoteFadeUp 780ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both' }}
+    style={{
+      margin: 0,
+      fontFamily: 'var(--osd-font-display)',
+      fontSize: '128px',
+      lineHeight: 1.05,
+      letterSpacing: '-0.04em',
+      fontWeight: 600,
+      maxWidth: 1360,
+      color: palette.text,
+      animation: 'keynoteFadeUp 780ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both',
+    }}
   >
     {children}
   </h1>
@@ -169,7 +179,17 @@ const Title = ({ children, size = 160 }: { children: ReactNode; size?: number })
 
 const SectionTitle = ({ children, size = 76 }: { children: ReactNode; size?: number }) => (
   <h2
-    style={{ margin: 0, fontFamily: 'var(--osd-font-display)', fontSize: '72px', lineHeight: 1.08, letterSpacing: '-0.03em', fontWeight: 600, maxWidth: 1280, color: palette.text, animation: 'keynoteFadeUp 760ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both' }}
+    style={{
+      margin: 0,
+      fontFamily: 'var(--osd-font-display)',
+      fontSize: '72px',
+      lineHeight: 1.08,
+      letterSpacing: '-0.03em',
+      fontWeight: 600,
+      maxWidth: 1280,
+      color: palette.text,
+      animation: 'keynoteFadeUp 760ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both',
+    }}
   >
     {children}
   </h2>

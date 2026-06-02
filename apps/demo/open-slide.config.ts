@@ -1,5 +1,7 @@
 import type { OpenSlideConfig } from '@open-slide/core';
 
-const openSlideConfig: OpenSlideConfig = {};
+const openSlideConfig: OpenSlideConfig = {
+  port: 5175,
+};
 
 export default openSlideConfig;

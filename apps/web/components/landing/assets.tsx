@@ -146,7 +146,7 @@ function AssetManagerMock() {
 
         {/* svgl Logo Search dialog */}
         <div className="absolute right-3 sm:right-5 bottom-3 sm:bottom-5 w-[80%] sm:w-[64%] max-w-[420px] rounded-[6px] border border-[color:var(--color-rule)] bg-[color:var(--color-panel-hi)] shadow-[0_10px_28px_-14px_rgba(0,0,0,0.35)] p-4">
-          <div className="flex items-center justify-between mb-3 font-[family-name:var(--font-mono)] text-[11px] text-[color:var(--color-muted)]">
+          <div className="flex items-center justify-between font-[family-name:var(--font-mono)] text-[11px] text-[color:var(--color-muted)]">
             <span>Search svgl</span>
             <span className="text-[color:var(--color-dim)]">✕</span>
           </div>
@@ -159,11 +159,10 @@ function AssetManagerMock() {
             {svglResults.map((r, i) => (
               <div
                 key={r.name}
-                className={`rounded-[6px] border ${
-                  i === 0
+                className={`rounded-[6px] border ${i === 0
                     ? 'border-[color:var(--color-accent)] bg-[color:var(--color-accent)]/[0.06]'
                     : 'border-[color:var(--color-rule)] bg-[color:var(--color-panel)]'
-                } p-2 flex flex-col items-center gap-1.5`}
+                  } p-2 flex flex-col items-center gap-1.5`}
               >
                 <div className="h-8 flex items-center justify-center">
                   {r.themed ? (
